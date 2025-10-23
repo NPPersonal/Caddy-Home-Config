@@ -1,0 +1,93 @@
+{
+  "admin": {},
+  "logging": {
+    "logs": {
+      "default": {
+        "level": "DEBUG"
+      }
+    }
+  },
+  "apps": {
+    "http": {
+      "servers": {
+        "serv0": {
+          "listen": [":443"],
+          "protocols": ["h1", "h2", "h2c", "h3"],
+          "routes": [
+            {
+              "terminal": true,
+              "match": [{ "host": ["pihole.home.arpa"] }],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "match": [{ "path": ["/"] }],
+                      "handle": [
+                        {
+                          "handler": "static_response",
+                          "status_code": "302",
+                          "headers": {
+                            "location": ["/admin"]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "pihole:80" }]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "terminal": true,
+              "match": [{ "host": ["caddy-manager.home.arpa"] }],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "caddymanager-frontend:80" }]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "terminal": true,
+              "match": [
+                { "host": ["gitea.home.arpa", "gitea.mingchun.stream"] }
+              ],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "gitea:3000" }]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

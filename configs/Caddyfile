@@ -1,0 +1,28 @@
+{
+	debug
+
+	## dev use
+	#acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+	## prod use
+	acme_ca https://acme-v02.api.letsencrypt.org/directory
+
+	servers {
+		protocols h1 h2 h2c h3
+	}
+}
+
+# PiHole dashboard
+pihole.home.arpa {
+	redir / /admin
+	reverse_proxy pihole:80
+}
+
+# Caddy manager dashboard
+caddy-manager.home.arpa {
+	reverse_proxy caddymanager-frontend:80
+}
+
+# Gitea
+gitea.home.arpa, gitea.mingchun.stream {
+	reverse_proxy gitea:3000
+}
