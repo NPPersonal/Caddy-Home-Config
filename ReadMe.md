@@ -28,7 +28,7 @@ Open directory in editor [visual studio code](https://code.visualstudio.com/) is
 Pick an supported configuration file.
 
 1. Modify configuration file.
-2. Run shell script to tell caddy to reload configuration file through caddy admin api.
+2. Run shell script to tell caddy to reload configuration file through caddy admin api. **Make sure your caddy had exposed port 2019**, which is for caddy REST api.
 
 ### Configuration files
 
