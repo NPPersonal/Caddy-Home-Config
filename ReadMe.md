@@ -74,4 +74,8 @@ services:
     networks:
       # Any backend server caddy will proxy to has to be in this network
       - proxy_network
+
+networks:
+  proxy_network:
+    driver: bridge
 ```
