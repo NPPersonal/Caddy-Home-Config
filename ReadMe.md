@@ -40,5 +40,7 @@ Pick an supported configuration file.
 Run shell script to tell caddy to reload config file. Script will make a REST request to [caddy's api](https://caddyserver.com/docs/api)
 to tell caddy to load the configuration.
 
+Script using `curl` command so modify ip address in script accoding to remote caddy host
+
 - Script that use Json configuration: ./caddy-load-caddyjson.sh
 - Script that use Caddyfile configuration: ./caddy-load-caddyfile.sh
