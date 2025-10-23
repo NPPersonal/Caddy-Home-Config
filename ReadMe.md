@@ -44,3 +44,34 @@ to tell caddy to load the configuration.
 
 - Script that use Json configuration: `./caddy-load-caddyjson.sh`
 - Script that use Caddyfile configuration: `./caddy-load-caddyfile.sh`
+
+## Caddy compose
+
+A standard caddy docker compose would look like
+
+```
+services:
+  caddy:
+    image: tomneo2004/caddyx:latest
+    container_name: caddy
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+      - "2019:2019"
+    environment:
+      # Use localhost:2019 only if your don't want to expose api to external machine
+      CADDY_ADMIN: 0.0.0.0:2019
+    volumes:
+      # Either replace <Path_To_Storage> with actual path in machine or give a name to storage in docker volume
+      - <Path_To_Storage>:/srv
+      - <Path_To_Storage>:/data
+      - <Path_To_Storage>:/config
+    command: caddy run
+    networks:
+      # Any backend server caddy will proxy to has to be in this network
+      - proxy_network
+```
