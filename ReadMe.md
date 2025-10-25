@@ -11,11 +11,13 @@ The docker image can be found on docker hub https://hub.docker.com/r/tomneo2004/
 
 ## Modules
 
-Installed modules for caddy.
+Some modules were installed during this custom build image.
+
+Installed modules:
 
 - [caddy-json-schema](https://github.com/abiosoft/caddy-json-schema): for easy fast configuring caddy Json file with intellisense. `.vscode` folder is the setting files for visual studio code to enable intellisense when configuring caddy Json file.
-
 - [caddy-l4](https://github.com/mholt/caddy-l4): support tcp/udp communication
+- [caddy-grpc-web](https://github.com/mholt/caddy-grpc-web): bridge between grpc-web and caddy
 
 ### [caddy-json-schema](https://github.com/abiosoft/caddy-json-schema)
 

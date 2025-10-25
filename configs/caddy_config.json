@@ -11,7 +11,7 @@
     "http": {
       "servers": {
         "serv0": {
-          "listen": [":443"],
+          "listen": [":443", ":33080"],
           "protocols": ["h1", "h2", "h2c", "h3"],
           "routes": [
             {
@@ -82,6 +82,126 @@
                       ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "terminal": true,
+              "match": [{ "host": ["authentik.mingchun.stream"] }],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "match": [{ "path": ["/*"] }],
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "authentik-server:9000" }]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "terminal": true,
+              "match": [
+                {
+                  "host": ["netbird.mingchun.stream"]
+                }
+              ],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "match": [
+                        { "path": ["/signalexchange.SignalExchange/*"] }
+                      ],
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "netbird-signal:80" }]
+                        }
+                      ]
+                    },
+                    {
+                      "match": [{ "path": ["/ws-proxy/signal*"] }],
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "netbird-signal:80" }]
+                        }
+                      ]
+                    },
+                    {
+                      "match": [{ "path": ["/api*"] }],
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "netbird-management:443" }]
+                        }
+                      ]
+                    },
+                    {
+                      "match": [
+                        { "path": ["/management.ManagementService/*"] }
+                      ],
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "netbird-management:443" }]
+                        }
+                      ]
+                    },
+                    {
+                      "match": [{ "path": ["/ws-proxy/management*"] }],
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "netbird-management:443" }]
+                        }
+                      ]
+                    },
+                    {
+                      "match": [{ "path": ["/relay*"] }],
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "netbird-relay:33080" }]
+                        }
+                      ]
+                    },
+                    {
+                      "match": [{ "path": ["/*"] }],
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "netbird-dashboard:80" }]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "layer4": {
+      "servers": {
+        "coturn-server": {
+          "listen": ["udp/:3478"],
+          "routes": [
+            {
+              "handle": [
+                {
+                  "handler": "proxy",
+                  "proxy_protocol": "v1",
+                  "upstreams": [{ "dial": ["udp/netbird-coturn:3478"] }]
                 }
               ]
             }
