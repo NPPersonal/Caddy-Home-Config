@@ -194,6 +194,25 @@
                   ]
                 }
               ]
+            },
+            {
+              "terminal": true,
+              "match": [{ "host": ["twenty-crm.mingchun.stream"] }],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "twenty-crm:3000" }]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
