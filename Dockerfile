@@ -4,7 +4,8 @@ FROM caddy:2.10.2-builder-alpine AS builder
 RUN xcaddy build \
     --with github.com/abiosoft/caddy-json-schema \
     --with github.com/mholt/caddy-l4 \
-    --with github.com/mholt/caddy-grpc-web
+    --with github.com/mholt/caddy-grpc-web \
+    --with github.com/caddy-dns/cloudflare
 
 FROM caddy:2.10.2-alpine
 
