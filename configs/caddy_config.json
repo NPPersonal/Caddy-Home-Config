@@ -9,10 +9,22 @@
           "filename": "/var/log/caddy/caddy.log",
           "mode": "644"
         }
+      },
+      "console-logs": {
+        "level": "DEBUG",
+        "writer": {
+          "output": "stdout"
+        }
       }
     }
   },
   "apps": {
+    "crowdsec": {
+      "api_url": "http://crowdsec:8080",
+      "api_key": "{env.CROWDSEC_API_KEY}",
+      "ticker_interval": "10s",
+      "enable_streaming": true
+    },
     "http": {
       "servers": {
         "serv0": {
@@ -23,6 +35,9 @@
               "terminal": true,
               "match": [{ "host": ["pihole.home.arpa"] }],
               "handle": [
+                {
+                  "handler": "crowdsec"
+                },
                 {
                   "handler": "subroute",
                   "routes": [
@@ -55,6 +70,9 @@
               "match": [{ "host": ["caddy-manager.home.arpa"] }],
               "handle": [
                 {
+                  "handler": "crowdsec"
+                },
+                {
                   "handler": "subroute",
                   "routes": [
                     {
@@ -76,6 +94,9 @@
               ],
               "handle": [
                 {
+                  "handler": "crowdsec"
+                },
+                {
                   "handler": "subroute",
                   "routes": [
                     {
@@ -94,6 +115,9 @@
               "terminal": true,
               "match": [{ "host": ["authentik.mingchun.stream"] }],
               "handle": [
+                {
+                  "handler": "crowdsec"
+                },
                 {
                   "handler": "subroute",
                   "routes": [
@@ -118,6 +142,9 @@
                 }
               ],
               "handle": [
+                {
+                  "handler": "crowdsec"
+                },
                 {
                   "handler": "subroute",
                   "routes": [
@@ -205,6 +232,9 @@
               "match": [{ "host": ["twenty-crm.mingchun.stream"] }],
               "handle": [
                 {
+                  "handler": "crowdsec"
+                },
+                {
                   "handler": "subroute",
                   "routes": [
                     {
@@ -212,6 +242,28 @@
                         {
                           "handler": "reverse_proxy",
                           "upstreams": [{ "dial": "twenty-crm:3000" }]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "terminal": true,
+              "match": [{ "host": ["grafana.mingchun.stream"] }],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "crowdsec"
+                        },
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "grafana:3000" }]
                         }
                       ]
                     }
