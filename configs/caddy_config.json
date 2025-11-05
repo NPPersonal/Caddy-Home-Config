@@ -3,7 +3,12 @@
   "logging": {
     "logs": {
       "default": {
-        "level": "DEBUG"
+        "level": "DEBUG",
+        "writer": {
+          "output": "file",
+          "filename": "/var/log/caddy/caddy.log",
+          "mode": "644"
+        }
       }
     }
   },
