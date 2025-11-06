@@ -67,6 +67,28 @@
             },
             {
               "terminal": true,
+              "match": [{ "host": ["dozzle.mingchun.stream"] }],
+              "handle": [
+                {
+                  "handler": "crowdsec"
+                },
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "dozzle:8080" }]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "terminal": true,
               "match": [{ "host": ["caddy-manager.home.arpa"] }],
               "handle": [
                 {
