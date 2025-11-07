@@ -27,7 +27,9 @@ Installed modules:
 
 ## Usage
 
-Open directory in editor [visual studio code](https://code.visualstudio.com/) is recommend becasue [caddy-json-schema](https://github.com/abiosoft/caddy-json-schema) module support configuring Json file with intellisense.
+1. Use `compose.yaml` to run necessary containers in docker
+
+2. Open directory in editor [visual studio code](https://code.visualstudio.com/) is recommend becasue [caddy-json-schema](https://github.com/abiosoft/caddy-json-schema) module support configuring Json file with intellisense.
 
 Pick an supported configuration file.
 
@@ -42,6 +44,20 @@ Pick an supported configuration file.
 ### Tell caddy to reload configuration file
 
 Script using `curl` command so modify ip address in script accoding to remote caddy host
+
+**You must create a file `.env` at root directory with following key/value pair** because
+scripts are depend on this setting
+
+```
+# Don't modify this
+CADDY_CONTENT_TYPE_CADDYFILE="text/caddyfile"
+CADDY_CONTENT_TYPE_JSON="application/json"
+CADDY_CONFIG_DIR="configs"
+
+# Modify to match caddy host
+CADDY_HOST="<Your_Caddy_Server_Address>"
+CADDY_API_PORT="2019"
+```
 
 Run shell script to tell caddy to reload config file. Script will make a REST request to [caddy's api](https://caddyserver.com/docs/api)
 to tell caddy to load the configuration.

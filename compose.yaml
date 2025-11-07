@@ -1,0 +1,253 @@
+services:
+  caddy:
+    image: tomneo2004/caddyx:latest
+    container_name: caddy
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "80:80/udp"
+      - "443:443"
+      - "443:443/udp"
+      - "2019:2019"
+      - "33080:33080"
+    environment:
+      CADDY_ADMIN: 0.0.0.0:2019
+      CROWDSEC_API_KEY: AH7kn2jBQ0FLiqPws158FuD8A8Z6VpO3
+    volumes:
+      #- /home/tomneo2004/Caddy:/etc/caddy
+      - /home/tomneo2004/Caddy/site:/srv
+      - /home/tomneo2004/Caddy/data:/data
+      - /home/tomneo2004/Caddy/config:/config
+      - caddy-logs:/var/log/caddy
+    command: caddy run --config /etc/caddy/Caddyfile --watch
+    networks:
+      - proxy_network
+
+  # Dozzle
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - proxy_network
+
+  ####
+  ## Crowdsec
+  ## For security with reverse proxy
+  crowdsec:
+    image: docker.io/crowdsecurity/crowdsec:latest
+    container_name: crowdsec
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    environment:
+      - COLLECTIONS=crowdsecurity/caddy crowdsecurity/http-cve crowdsecurity/whitelist-good-actors
+      - BOUNCER_KEY_CADDY=AH7kn2jBQ0FLiqPws158FuD8A8Z6VpO3
+    volumes:
+      - /home/tomneo2004/Crowdsec:/etc/crowdsec
+      - /home/tomneo2004/Crowdsec/data:/var/lib/crowdsec/data
+      - /home/tomneo2004/Crowdsec/acquis:/etc/crowdsec/acquis.d
+      - caddy-logs:/var/log/caddy:ro
+    networks:
+      - proxy_network
+
+  ####
+  ## Prometheus
+  ## https://prometheus.io/
+  ##
+  ## Scraping log data and provide data for visualizatoin with grafana
+  ##
+  ## Crowdsec provide prometheus endpoint on port 6060
+  ## https://docs.crowdsec.net/docs/observability/prometheus/
+  ##
+  ## Configure for crowdsec
+  ## https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+  ## 1. create a file `prometheus.yml` under prometheus directory
+  ## 2. add following to the file where target need to point to crowdsec's prometheus
+  ## endpoint
+  #
+  # global:
+  #   scrape_interval: 10s
+  # scrape_configs:
+  #   - job_name: 'crowdsec'
+  #     static_configs:
+  #       - targets: ['crowdsec:6060']
+  #         labels:
+  #           machine: 'crowdsec'
+  ## 3. restart crowdsec
+  prometheus:
+    image: prom/prometheus
+    container_name: "prometheus"
+    restart: unless-stopped
+    user: "1000:1000"
+    ports:
+      - "9090:9090"
+    volumes:
+      - /home/tomneo2004/Prometheus:/etc/prometheus
+      - /home/tomneo2004/Prometheus/data:/prometheus
+    networks:
+      - proxy_network
+
+  ####
+  ## VictoriaMetrics
+  ## https://victoriametrics.com/
+  ##
+  ## Similar to Prometheus but crowdsec will push log to VictoriaMetrics and it will
+  ## provide data for visualization with grafana
+  ##
+  ## Tutorial to setup with crowdsec:
+  ##  - https://freefd.github.io/articles/8_cyber_threat_insights_with_crowdsec_victoriametrics_and_grafana/
+  ##  - https://blog.lrvt.de/grafana-dashboard-for-crowdsec-cyber-threat-intelligence-insights/
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:latest
+    container_name: "victoriametrics"
+    restart: unless-stopped
+    ports:
+      - "8428:8428"
+    volumes:
+      - /home/tomneo2004/VictoriaMetrics/data:/victoria-metrics-data
+    networks:
+      - proxy_network
+
+  ####
+  ## Grafana
+  ## https://grafana.com/products/cloud/?src=ggl-s&mdm=cpc&camp=b-grafana-exac-apac&cnt=118051266643&trm=grafana&device=c&gad_campaignid=12447384233
+  ## Visualization tool
+  ##
+  ## 1. Add data source in grafana dashboard for Prometheus and VictoriaMetrics
+  ## 2. Add grafana dashboard json file for Crowdsec
+  ##  https://github.com/crowdsecurity/grafana-dashboards
+  ## 3. Search dashboard ID in grafana while importing dashboard for VictoriaMetrics
+  grafana:
+    image: grafana/grafana
+    container_name: "grafana"
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - proxy_network
+
+  # MongoDB database for persistent storage (optional - SQLite is used by default)
+  mongodb:
+    image: mongo:8.0
+    container_name: caddymanager-mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=tomneo2004
+      - MONGO_INITDB_ROOT_PASSWORD=Doby581988 # Change for production!
+    ports:
+      - "27017:27017" # Expose for local dev, remove for production
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - proxy_network
+    profiles:
+      - mongodb # Use 'docker-compose --profile mongodb up' to include MongoDB
+
+  # Backend API server
+  backend:
+    image: caddymanager/caddymanager-backend:latest
+    container_name: caddymanager-backend
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+      # Database Engine Configuration (defaults to SQLite)
+      - DB_ENGINE=sqlite # Options: 'sqlite' or 'mongodb'
+      # SQLite Configuration (used when DB_ENGINE=sqlite)
+      - SQLITE_DB_PATH=/app/data/caddymanager.sqlite
+      # MongoDB Configuration (used when DB_ENGINE=mongodb)
+      - MONGODB_URI=mongodb://tomneo2004:Doby581988@mongodb:27017/caddymanager?authSource=admin
+      - CORS_ORIGIN=http://localhost:80
+      - LOG_LEVEL=debug
+      - CADDY_SANDBOX_URL=http://localhost:2019
+      - PING_INTERVAL=30000
+      - PING_TIMEOUT=2000
+      - AUDIT_LOG_MAX_SIZE_MB=100
+      - AUDIT_LOG_RETENTION_DAYS=90
+      - METRICS_HISTORY_MAX=1000 # Optional: max number of in-memory metric history snapshots to keep
+      - JWT_SECRET=your_jwt_secret_key_here # Change for production!
+      - JWT_EXPIRATION=24h
+    # Backend is now only accessible through frontend proxy
+    volumes:
+      - sqlite_data:/app/data # SQLite database storage
+    networks:
+      - proxy_network
+
+  # Frontend web UI
+  frontend:
+    image: caddymanager/caddymanager-frontend:latest
+    container_name: caddymanager-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_HOST=backend:3000
+      - APP_NAME=Caddy Manager
+      - DARK_MODE=true
+    ports:
+      - "81:80" # Expose web UI
+    networks:
+      - proxy_network
+
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      # DNS Ports
+      - "53:53/tcp"
+      - "53:53/udp"
+      # Default HTTP Port
+      - "8081:80/tcp"
+      # Default HTTPs Port. FTL will generate a self-signed certificate
+      #- "443:443/tcp"
+      # Uncomment the line below if you are using Pi-hole as your DHCP server
+      #- "67:67/udp"
+      # Uncomment the line below if you are using Pi-hole as your NTP server
+      #- "123:123/udp"
+    environment:
+      # Set the appropriate timezone for your location (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g:
+      TZ: "Asia/Taipei"
+      # Set a password to access the web interface. Not setting one will result in a random password being assigned
+      FTLCONF_webserver_api_password: "Doby581988"
+      # If using Docker's default `bridge` network setting the dns listening mode should be set to 'all'
+      FTLCONF_dns_listeningMode: "all"
+    # Volumes store your data between container upgrades
+    volumes:
+      # For persisting Pi-hole's databases and common configuration file
+      - "/home/tomneo2004/PiHole/etc-pihole:/etc/pihole"
+      # Uncomment the below if you have custom dnsmasq config files that you want to persist. Not needed for most starting fresh with Pi-hole v6. If you're upgrading from v5 you and have used this directory before, you should keep it enabled for the first v6 container start to allow for a complete migration. It can be removed afterwards. Needs environment variable FTLCONF_misc_etc_dnsmasq_d: 'true'
+      - "/home/tomneo2004/PiHole/etc-dnsmasq.d:/etc/dnsmasq.d"
+    networks:
+      - proxy_network
+    cap_add:
+      # See https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+      # Required if you are using Pi-hole as your DHCP server, else not needed
+      - NET_ADMIN
+      # Required if you are using Pi-hole as your NTP client to be able to set the host's system time
+      - SYS_TIME
+      # Optional, if Pi-hole should get some more processing time
+      - SYS_NICE
+    restart: unless-stopped
+
+networks:
+  proxy_network:
+    driver: bridge
+
+volumes:
+  caddy-logs: # Caddy logs
+  mongodb_data: # Only used when MongoDB profile is active
+  sqlite_data: # SQLite database storage
+
+# Notes:
+# - SQLite is the default database engine - no additional setup required!
+# - To use MongoDB instead, set DB_ENGINE=mongodb and start with: docker-compose --profile mongodb up
+# - For production, use strong passwords and consider secrets management.
+# - The backend uses SQLite by default, storing data in a persistent volume.
+# - The frontend proxies all /api/* requests to the backend service.
+# - Backend is not directly exposed - all API access goes through the frontend proxy.
