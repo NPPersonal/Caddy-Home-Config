@@ -172,6 +172,42 @@
                       "if": {
                         "properties": {
                           "handler": {
+                            "const": "subroute"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/layer4.handlers.subroute"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "tee"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/layer4.handlers.tee"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "throttle"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/layer4.handlers.throttle"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
                             "const": "tls"
                           }
                         }
@@ -229,56 +265,20 @@
                       }
                     },
                     {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "subroute"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/layer4.handlers.subroute"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "tee"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/layer4.handlers.tee"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "throttle"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/layer4.handlers.throttle"
-                      }
-                    },
-                    {
                       "properties": {
                         "handler": {
                           "description": "key to identify handle module.\nhandler: string\nModule: layer4.handlers",
                           "markdownDescription": "key to identify `handle` module.  \nhandler: `string`  \nModule: `layer4.handlers`",
                           "type": "string",
                           "enum": [
+                            "subroute",
+                            "tee",
+                            "throttle",
                             "tls",
                             "echo",
                             "proxy",
                             "proxy_protocol",
-                            "socks5",
-                            "subroute",
-                            "tee",
-                            "throttle"
+                            "socks5"
                           ]
                         }
                       }
@@ -579,30 +579,6 @@
                 "if": {
                   "properties": {
                     "filter": {
-                      "const": "rename"
-                    }
-                  }
-                },
-                "then": {
-                  "$ref": "#/definitions/caddy.logging.encoders.filter.rename"
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "filter": {
-                      "const": "replace"
-                    }
-                  }
-                },
-                "then": {
-                  "$ref": "#/definitions/caddy.logging.encoders.filter.replace"
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "filter": {
                       "const": "cookie"
                     }
                   }
@@ -672,20 +648,44 @@
                 }
               },
               {
+                "if": {
+                  "properties": {
+                    "filter": {
+                      "const": "rename"
+                    }
+                  }
+                },
+                "then": {
+                  "$ref": "#/definitions/caddy.logging.encoders.filter.rename"
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "filter": {
+                      "const": "replace"
+                    }
+                  }
+                },
+                "then": {
+                  "$ref": "#/definitions/caddy.logging.encoders.filter.replace"
+                }
+              },
+              {
                 "properties": {
                   "filter": {
                     "description": "key to identify fields module.\nfilter: string\nModule: caddy.logging.encoders.filter",
                     "markdownDescription": "key to identify `fields` module.  \nfilter: `string`  \nModule: `caddy.logging.encoders.filter`",
                     "type": "string",
                     "enum": [
-                      "rename",
-                      "replace",
                       "cookie",
                       "delete",
                       "hash",
                       "ip_mask",
                       "query",
-                      "regexp"
+                      "regexp",
+                      "rename",
+                      "replace"
                     ]
                   }
                 }
@@ -1313,120 +1313,12 @@
                                 "if": {
                                   "properties": {
                                     "handler": {
-                                      "const": "intercept"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.intercept"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
-                                      "const": "appsec"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.appsec"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
-                                      "const": "authentication"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.authentication"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
-                                      "const": "copy_response_headers"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.copy_response_headers"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
-                                      "const": "crowdsec"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.crowdsec"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
-                                      "const": "file_server"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.file_server"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
                                       "const": "push"
                                     }
                                   }
                                 },
                                 "then": {
                                   "$ref": "#/definitions/http.handlers.push"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
-                                      "const": "reverse_proxy"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.reverse_proxy"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
-                                      "const": "copy_response"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.copy_response"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
-                                      "const": "metrics"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.metrics"
                                 }
                               },
                               {
@@ -1445,18 +1337,6 @@
                                 "if": {
                                   "properties": {
                                     "handler": {
-                                      "const": "templates"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.templates"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
                                       "const": "vars"
                                     }
                                   }
@@ -1469,12 +1349,84 @@
                                 "if": {
                                   "properties": {
                                     "handler": {
-                                      "const": "acme_server"
+                                      "const": "appsec"
                                     }
                                   }
                                 },
                                 "then": {
-                                  "$ref": "#/definitions/http.handlers.acme_server"
+                                  "$ref": "#/definitions/http.handlers.appsec"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
+                                      "const": "copy_response"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.copy_response"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
+                                      "const": "intercept"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.intercept"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
+                                      "const": "metrics"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.metrics"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
+                                      "const": "reverse_proxy"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.reverse_proxy"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
+                                      "const": "rewrite"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.rewrite"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
+                                      "const": "authentication"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.authentication"
                                 }
                               },
                               {
@@ -1505,24 +1457,24 @@
                                 "if": {
                                   "properties": {
                                     "handler": {
-                                      "const": "map"
+                                      "const": "invoke"
                                     }
                                   }
                                 },
                                 "then": {
-                                  "$ref": "#/definitions/http.handlers.map"
+                                  "$ref": "#/definitions/http.handlers.invoke"
                                 }
                               },
                               {
                                 "if": {
                                   "properties": {
                                     "handler": {
-                                      "const": "static_response"
+                                      "const": "templates"
                                     }
                                   }
                                 },
                                 "then": {
-                                  "$ref": "#/definitions/http.handlers.static_response"
+                                  "$ref": "#/definitions/http.handlers.templates"
                                 }
                               },
                               {
@@ -1541,12 +1493,48 @@
                                 "if": {
                                   "properties": {
                                     "handler": {
+                                      "const": "acme_server"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.acme_server"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
+                                      "const": "copy_response_headers"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.copy_response_headers"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
                                       "const": "error"
                                     }
                                   }
                                 },
                                 "then": {
                                   "$ref": "#/definitions/http.handlers.error"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
+                                      "const": "file_server"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.file_server"
                                 }
                               },
                               {
@@ -1565,12 +1553,36 @@
                                 "if": {
                                   "properties": {
                                     "handler": {
-                                      "const": "invoke"
+                                      "const": "static_response"
                                     }
                                   }
                                 },
                                 "then": {
-                                  "$ref": "#/definitions/http.handlers.invoke"
+                                  "$ref": "#/definitions/http.handlers.static_response"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
+                                      "const": "subroute"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.subroute"
+                                }
+                              },
+                              {
+                                "if": {
+                                  "properties": {
+                                    "handler": {
+                                      "const": "crowdsec"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "$ref": "#/definitions/http.handlers.crowdsec"
                                 }
                               },
                               {
@@ -1589,24 +1601,12 @@
                                 "if": {
                                   "properties": {
                                     "handler": {
-                                      "const": "rewrite"
+                                      "const": "map"
                                     }
                                   }
                                 },
                                 "then": {
-                                  "$ref": "#/definitions/http.handlers.rewrite"
-                                }
-                              },
-                              {
-                                "if": {
-                                  "properties": {
-                                    "handler": {
-                                      "const": "subroute"
-                                    }
-                                  }
-                                },
-                                "then": {
-                                  "$ref": "#/definitions/http.handlers.subroute"
+                                  "$ref": "#/definitions/http.handlers.map"
                                 }
                               },
                               {
@@ -1616,31 +1616,31 @@
                                     "markdownDescription": "key to identify `handle` module.  \nhandler: `string`  \nModule: `http.handlers`",
                                     "type": "string",
                                     "enum": [
-                                      "intercept",
-                                      "appsec",
-                                      "authentication",
-                                      "copy_response_headers",
-                                      "crowdsec",
-                                      "file_server",
                                       "push",
-                                      "reverse_proxy",
-                                      "copy_response",
-                                      "metrics",
                                       "request_body",
-                                      "templates",
                                       "vars",
-                                      "acme_server",
+                                      "appsec",
+                                      "copy_response",
+                                      "intercept",
+                                      "metrics",
+                                      "reverse_proxy",
+                                      "rewrite",
+                                      "authentication",
                                       "encode",
                                       "grpc_web",
-                                      "map",
-                                      "static_response",
-                                      "tracing",
-                                      "error",
-                                      "headers",
                                       "invoke",
+                                      "templates",
+                                      "tracing",
+                                      "acme_server",
+                                      "copy_response_headers",
+                                      "error",
+                                      "file_server",
+                                      "headers",
+                                      "static_response",
+                                      "subroute",
+                                      "crowdsec",
                                       "log_append",
-                                      "rewrite",
-                                      "subroute"
+                                      "map"
                                     ]
                                   }
                                 }
@@ -1765,6 +1765,18 @@
                       "if": {
                         "properties": {
                           "wrapper": {
+                            "const": "proxy_protocol"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/caddy.listeners.proxy_protocol"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "wrapper": {
                             "const": "tls"
                           }
                         }
@@ -1798,28 +1810,16 @@
                       }
                     },
                     {
-                      "if": {
-                        "properties": {
-                          "wrapper": {
-                            "const": "proxy_protocol"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/caddy.listeners.proxy_protocol"
-                      }
-                    },
-                    {
                       "properties": {
                         "wrapper": {
                           "description": "key to identify listener_wrappers module.\nwrapper: string\nModule: caddy.listeners",
                           "markdownDescription": "key to identify `listener_wrappers` module.  \nwrapper: `string`  \nModule: `caddy.listeners`",
                           "type": "string",
                           "enum": [
+                            "proxy_protocol",
                             "tls",
                             "http_redirect",
-                            "layer4",
-                            "proxy_protocol"
+                            "layer4"
                           ]
                         }
                       }
@@ -1922,12 +1922,96 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "acme_server"
+                                  "const": "vars"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.acme_server"
+                              "$ref": "#/definitions/http.handlers.vars"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "appsec"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.appsec"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "copy_response"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.copy_response"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "intercept"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.intercept"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "metrics"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.metrics"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "reverse_proxy"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.reverse_proxy"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "rewrite"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.rewrite"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "authentication"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.authentication"
                             }
                           },
                           {
@@ -1958,240 +2042,12 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "map"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.map"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "static_response"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.static_response"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "tracing"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.tracing"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "error"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.error"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "headers"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.headers"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
                                   "const": "invoke"
                                 }
                               }
                             },
                             "then": {
                               "$ref": "#/definitions/http.handlers.invoke"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "log_append"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.log_append"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "rewrite"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.rewrite"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "subroute"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.subroute"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "intercept"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.intercept"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "appsec"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.appsec"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "authentication"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.authentication"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "copy_response_headers"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.copy_response_headers"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "crowdsec"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.crowdsec"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "file_server"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.file_server"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "push"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.push"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "reverse_proxy"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.reverse_proxy"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "copy_response"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.copy_response"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "metrics"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.metrics"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "request_body"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.request_body"
                             }
                           },
                           {
@@ -2210,12 +2066,156 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "vars"
+                                  "const": "tracing"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.vars"
+                              "$ref": "#/definitions/http.handlers.tracing"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "acme_server"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.acme_server"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "copy_response_headers"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.copy_response_headers"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "error"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.error"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "file_server"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.file_server"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "headers"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.headers"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "static_response"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.static_response"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "subroute"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.subroute"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "crowdsec"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.crowdsec"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "log_append"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.log_append"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "map"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.map"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "push"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.push"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "request_body"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.request_body"
                             }
                           },
                           {
@@ -2225,31 +2225,31 @@
                                 "markdownDescription": "key to identify `handle` module.  \nhandler: `string`  \nModule: `http.handlers`",
                                 "type": "string",
                                 "enum": [
-                                  "acme_server",
+                                  "vars",
+                                  "appsec",
+                                  "copy_response",
+                                  "intercept",
+                                  "metrics",
+                                  "reverse_proxy",
+                                  "rewrite",
+                                  "authentication",
                                   "encode",
                                   "grpc_web",
-                                  "map",
-                                  "static_response",
-                                  "tracing",
-                                  "error",
-                                  "headers",
                                   "invoke",
-                                  "log_append",
-                                  "rewrite",
-                                  "subroute",
-                                  "intercept",
-                                  "appsec",
-                                  "authentication",
-                                  "copy_response_headers",
-                                  "crowdsec",
-                                  "file_server",
-                                  "push",
-                                  "reverse_proxy",
-                                  "copy_response",
-                                  "metrics",
-                                  "request_body",
                                   "templates",
-                                  "vars"
+                                  "tracing",
+                                  "acme_server",
+                                  "copy_response_headers",
+                                  "error",
+                                  "file_server",
+                                  "headers",
+                                  "static_response",
+                                  "subroute",
+                                  "crowdsec",
+                                  "log_append",
+                                  "map",
+                                  "push",
+                                  "request_body"
                                 ]
                               }
                             }
@@ -2373,24 +2373,144 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "request_body"
+                                  "const": "acme_server"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.request_body"
+                              "$ref": "#/definitions/http.handlers.acme_server"
                             }
                           },
                           {
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "templates"
+                                  "const": "copy_response_headers"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.templates"
+                              "$ref": "#/definitions/http.handlers.copy_response_headers"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "error"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.error"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "file_server"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.file_server"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "headers"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.headers"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "static_response"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.static_response"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "subroute"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.subroute"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "crowdsec"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.crowdsec"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "log_append"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.log_append"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "map"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.map"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "push"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.push"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "request_body"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.request_body"
                             }
                           },
                           {
@@ -2409,12 +2529,84 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "acme_server"
+                                  "const": "appsec"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.acme_server"
+                              "$ref": "#/definitions/http.handlers.appsec"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "copy_response"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.copy_response"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "intercept"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.intercept"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "metrics"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.metrics"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "reverse_proxy"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.reverse_proxy"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "rewrite"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.rewrite"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "authentication"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.authentication"
                             }
                           },
                           {
@@ -2445,24 +2637,24 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "map"
+                                  "const": "invoke"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.map"
+                              "$ref": "#/definitions/http.handlers.invoke"
                             }
                           },
                           {
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "static_response"
+                                  "const": "templates"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.static_response"
+                              "$ref": "#/definitions/http.handlers.templates"
                             }
                           },
                           {
@@ -2478,229 +2670,37 @@
                             }
                           },
                           {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "error"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.error"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "headers"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.headers"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "invoke"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.invoke"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "log_append"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.log_append"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "rewrite"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.rewrite"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "subroute"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.subroute"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "intercept"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.intercept"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "appsec"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.appsec"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "authentication"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.authentication"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "copy_response_headers"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.copy_response_headers"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "crowdsec"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.crowdsec"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "file_server"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.file_server"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "push"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.push"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "reverse_proxy"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.reverse_proxy"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "copy_response"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.copy_response"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "metrics"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.metrics"
-                            }
-                          },
-                          {
                             "properties": {
                               "handler": {
                                 "description": "key to identify handle module.\nhandler: string\nModule: http.handlers",
                                 "markdownDescription": "key to identify `handle` module.  \nhandler: `string`  \nModule: `http.handlers`",
                                 "type": "string",
                                 "enum": [
-                                  "request_body",
-                                  "templates",
-                                  "vars",
                                   "acme_server",
+                                  "copy_response_headers",
+                                  "error",
+                                  "file_server",
+                                  "headers",
+                                  "static_response",
+                                  "subroute",
+                                  "crowdsec",
+                                  "log_append",
+                                  "map",
+                                  "push",
+                                  "request_body",
+                                  "vars",
+                                  "appsec",
+                                  "copy_response",
+                                  "intercept",
+                                  "metrics",
+                                  "reverse_proxy",
+                                  "rewrite",
+                                  "authentication",
                                   "encode",
                                   "grpc_web",
-                                  "map",
-                                  "static_response",
-                                  "tracing",
-                                  "error",
-                                  "headers",
                                   "invoke",
-                                  "log_append",
-                                  "rewrite",
-                                  "subroute",
-                                  "intercept",
-                                  "appsec",
-                                  "authentication",
-                                  "copy_response_headers",
-                                  "crowdsec",
-                                  "file_server",
-                                  "push",
-                                  "reverse_proxy",
-                                  "copy_response",
-                                  "metrics"
+                                  "templates",
+                                  "tracing"
                                 ]
                               }
                             }
@@ -2878,30 +2878,6 @@
                               "if": {
                                 "properties": {
                                   "provider": {
-                                    "const": "inline"
-                                  }
-                                }
-                              },
-                              "then": {
-                                "$ref": "#/definitions/tls.ca_pool.source.inline"
-                              }
-                            },
-                            {
-                              "if": {
-                                "properties": {
-                                  "provider": {
-                                    "const": "pki_intermediate"
-                                  }
-                                }
-                              },
-                              "then": {
-                                "$ref": "#/definitions/tls.ca_pool.source.pki_intermediate"
-                              }
-                            },
-                            {
-                              "if": {
-                                "properties": {
-                                  "provider": {
                                     "const": "pki_root"
                                   }
                                 }
@@ -2947,18 +2923,42 @@
                               }
                             },
                             {
+                              "if": {
+                                "properties": {
+                                  "provider": {
+                                    "const": "inline"
+                                  }
+                                }
+                              },
+                              "then": {
+                                "$ref": "#/definitions/tls.ca_pool.source.inline"
+                              }
+                            },
+                            {
+                              "if": {
+                                "properties": {
+                                  "provider": {
+                                    "const": "pki_intermediate"
+                                  }
+                                }
+                              },
+                              "then": {
+                                "$ref": "#/definitions/tls.ca_pool.source.pki_intermediate"
+                              }
+                            },
+                            {
                               "properties": {
                                 "provider": {
                                   "description": "key to identify ca module.\nprovider: string\nModule: tls.ca_pool.source",
                                   "markdownDescription": "key to identify `ca` module.  \nprovider: `string`  \nModule: `tls.ca_pool.source`",
                                   "type": "string",
                                   "enum": [
-                                    "inline",
-                                    "pki_intermediate",
                                     "pki_root",
                                     "storage",
                                     "file",
-                                    "http"
+                                    "http",
+                                    "inline",
+                                    "pki_intermediate"
                                   ]
                                 }
                               }
@@ -3121,6 +3121,18 @@
                     "if": {
                       "properties": {
                         "source": {
+                          "const": "cloudflare"
+                        }
+                      }
+                    },
+                    "then": {
+                      "$ref": "#/definitions/http.ip_sources.cloudflare"
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "source": {
                           "const": "static"
                         }
                       }
@@ -3136,6 +3148,7 @@
                         "markdownDescription": "key to identify `trusted_proxies` module.  \nsource: `string`  \nModule: `http.ip_sources`",
                         "type": "string",
                         "enum": [
+                          "cloudflare",
                           "static"
                         ]
                       }
@@ -3919,72 +3932,12 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "copy_response"
+                                  "const": "authentication"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.copy_response"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "metrics"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.metrics"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "request_body"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.request_body"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "templates"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.templates"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "vars"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.vars"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "acme_server"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.acme_server"
+                              "$ref": "#/definitions/http.handlers.authentication"
                             }
                           },
                           {
@@ -4015,24 +3968,24 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "map"
+                                  "const": "invoke"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.map"
+                              "$ref": "#/definitions/http.handlers.invoke"
                             }
                           },
                           {
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "static_response"
+                                  "const": "templates"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.static_response"
+                              "$ref": "#/definitions/http.handlers.templates"
                             }
                           },
                           {
@@ -4051,108 +4004,12 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "error"
+                                  "const": "acme_server"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.error"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "headers"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.headers"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "invoke"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.invoke"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "log_append"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.log_append"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "rewrite"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.rewrite"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "subroute"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.subroute"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "intercept"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.intercept"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "appsec"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.appsec"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "authentication"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.authentication"
+                              "$ref": "#/definitions/http.handlers.acme_server"
                             }
                           },
                           {
@@ -4171,12 +4028,12 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "crowdsec"
+                                  "const": "error"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.crowdsec"
+                              "$ref": "#/definitions/http.handlers.error"
                             }
                           },
                           {
@@ -4195,12 +4052,156 @@
                             "if": {
                               "properties": {
                                 "handler": {
+                                  "const": "headers"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.headers"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "static_response"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.static_response"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "subroute"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.subroute"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "crowdsec"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.crowdsec"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "log_append"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.log_append"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "map"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.map"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
                                   "const": "push"
                                 }
                               }
                             },
                             "then": {
                               "$ref": "#/definitions/http.handlers.push"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "request_body"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.request_body"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "vars"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.vars"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "appsec"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.appsec"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "copy_response"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.copy_response"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "intercept"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.intercept"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "metrics"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.metrics"
                             }
                           },
                           {
@@ -4216,37 +4217,49 @@
                             }
                           },
                           {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "rewrite"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.rewrite"
+                            }
+                          },
+                          {
                             "properties": {
                               "handler": {
                                 "description": "key to identify handle module.\nhandler: string\nModule: http.handlers",
                                 "markdownDescription": "key to identify `handle` module.  \nhandler: `string`  \nModule: `http.handlers`",
                                 "type": "string",
                                 "enum": [
-                                  "copy_response",
-                                  "metrics",
-                                  "request_body",
-                                  "templates",
-                                  "vars",
-                                  "acme_server",
+                                  "authentication",
                                   "encode",
                                   "grpc_web",
-                                  "map",
-                                  "static_response",
-                                  "tracing",
-                                  "error",
-                                  "headers",
                                   "invoke",
-                                  "log_append",
-                                  "rewrite",
-                                  "subroute",
-                                  "intercept",
-                                  "appsec",
-                                  "authentication",
+                                  "templates",
+                                  "tracing",
+                                  "acme_server",
                                   "copy_response_headers",
-                                  "crowdsec",
+                                  "error",
                                   "file_server",
+                                  "headers",
+                                  "static_response",
+                                  "subroute",
+                                  "crowdsec",
+                                  "log_append",
+                                  "map",
                                   "push",
-                                  "reverse_proxy"
+                                  "request_body",
+                                  "vars",
+                                  "appsec",
+                                  "copy_response",
+                                  "intercept",
+                                  "metrics",
+                                  "reverse_proxy",
+                                  "rewrite"
                                 ]
                               }
                             }
@@ -4712,120 +4725,12 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "rewrite"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.rewrite"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "subroute"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.subroute"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "intercept"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.intercept"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
                                   "const": "appsec"
                                 }
                               }
                             },
                             "then": {
                               "$ref": "#/definitions/http.handlers.appsec"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "authentication"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.authentication"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "copy_response_headers"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.copy_response_headers"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "crowdsec"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.crowdsec"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "file_server"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.file_server"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "push"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.push"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "reverse_proxy"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.reverse_proxy"
                             }
                           },
                           {
@@ -4844,6 +4749,18 @@
                             "if": {
                               "properties": {
                                 "handler": {
+                                  "const": "intercept"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.intercept"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
                                   "const": "metrics"
                                 }
                               }
@@ -4856,48 +4773,36 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "request_body"
+                                  "const": "reverse_proxy"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.request_body"
+                              "$ref": "#/definitions/http.handlers.reverse_proxy"
                             }
                           },
                           {
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "templates"
+                                  "const": "rewrite"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.templates"
+                              "$ref": "#/definitions/http.handlers.rewrite"
                             }
                           },
                           {
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "vars"
+                                  "const": "authentication"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.vars"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "acme_server"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/http.handlers.acme_server"
+                              "$ref": "#/definitions/http.handlers.authentication"
                             }
                           },
                           {
@@ -4928,24 +4833,24 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "map"
+                                  "const": "invoke"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.map"
+                              "$ref": "#/definitions/http.handlers.invoke"
                             }
                           },
                           {
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "static_response"
+                                  "const": "templates"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.static_response"
+                              "$ref": "#/definitions/http.handlers.templates"
                             }
                           },
                           {
@@ -4964,12 +4869,48 @@
                             "if": {
                               "properties": {
                                 "handler": {
+                                  "const": "acme_server"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.acme_server"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "copy_response_headers"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.copy_response_headers"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
                                   "const": "error"
                                 }
                               }
                             },
                             "then": {
                               "$ref": "#/definitions/http.handlers.error"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "file_server"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.file_server"
                             }
                           },
                           {
@@ -4988,12 +4929,36 @@
                             "if": {
                               "properties": {
                                 "handler": {
-                                  "const": "invoke"
+                                  "const": "static_response"
                                 }
                               }
                             },
                             "then": {
-                              "$ref": "#/definitions/http.handlers.invoke"
+                              "$ref": "#/definitions/http.handlers.static_response"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "subroute"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.subroute"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "crowdsec"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.crowdsec"
                             }
                           },
                           {
@@ -5009,37 +4974,85 @@
                             }
                           },
                           {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "map"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.map"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "push"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.push"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "request_body"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.request_body"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "vars"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/http.handlers.vars"
+                            }
+                          },
+                          {
                             "properties": {
                               "handler": {
                                 "description": "key to identify handle module.\nhandler: string\nModule: http.handlers",
                                 "markdownDescription": "key to identify `handle` module.  \nhandler: `string`  \nModule: `http.handlers`",
                                 "type": "string",
                                 "enum": [
-                                  "rewrite",
-                                  "subroute",
-                                  "intercept",
                                   "appsec",
-                                  "authentication",
-                                  "copy_response_headers",
-                                  "crowdsec",
-                                  "file_server",
-                                  "push",
-                                  "reverse_proxy",
                                   "copy_response",
+                                  "intercept",
                                   "metrics",
-                                  "request_body",
-                                  "templates",
-                                  "vars",
-                                  "acme_server",
+                                  "reverse_proxy",
+                                  "rewrite",
+                                  "authentication",
                                   "encode",
                                   "grpc_web",
-                                  "map",
-                                  "static_response",
-                                  "tracing",
-                                  "error",
-                                  "headers",
                                   "invoke",
-                                  "log_append"
+                                  "templates",
+                                  "tracing",
+                                  "acme_server",
+                                  "copy_response_headers",
+                                  "error",
+                                  "file_server",
+                                  "headers",
+                                  "static_response",
+                                  "subroute",
+                                  "crowdsec",
+                                  "log_append",
+                                  "map",
+                                  "push",
+                                  "request_body",
+                                  "vars"
                                 ]
                               }
                             }
@@ -5529,6 +5542,90 @@
                   "if": {
                     "properties": {
                       "policy": {
+                        "const": "cookie"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.cookie"
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "policy": {
+                        "const": "first"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.first"
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "policy": {
+                        "const": "ip_hash"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.ip_hash"
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "policy": {
+                        "const": "random"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.random"
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "policy": {
+                        "const": "uri_hash"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.uri_hash"
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "policy": {
+                        "const": "client_ip_hash"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.client_ip_hash"
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "policy": {
+                        "const": "header"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.header"
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "policy": {
                         "const": "least_conn"
                       }
                     }
@@ -5547,18 +5644,6 @@
                   },
                   "then": {
                     "$ref": "#/definitions/http.reverse_proxy.selection_policies.query"
-                  }
-                },
-                {
-                  "if": {
-                    "properties": {
-                      "policy": {
-                        "const": "random"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.random"
                   }
                 },
                 {
@@ -5589,42 +5674,6 @@
                   "if": {
                     "properties": {
                       "policy": {
-                        "const": "client_ip_hash"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.client_ip_hash"
-                  }
-                },
-                {
-                  "if": {
-                    "properties": {
-                      "policy": {
-                        "const": "cookie"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.cookie"
-                  }
-                },
-                {
-                  "if": {
-                    "properties": {
-                      "policy": {
-                        "const": "uri_hash"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.uri_hash"
-                  }
-                },
-                {
-                  "if": {
-                    "properties": {
-                      "policy": {
                         "const": "weighted_round_robin"
                       }
                     }
@@ -5634,60 +5683,24 @@
                   }
                 },
                 {
-                  "if": {
-                    "properties": {
-                      "policy": {
-                        "const": "first"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.first"
-                  }
-                },
-                {
-                  "if": {
-                    "properties": {
-                      "policy": {
-                        "const": "header"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.header"
-                  }
-                },
-                {
-                  "if": {
-                    "properties": {
-                      "policy": {
-                        "const": "ip_hash"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/http.reverse_proxy.selection_policies.ip_hash"
-                  }
-                },
-                {
                   "properties": {
                     "policy": {
                       "description": "key to identify selection_policy module.\npolicy: string\nModule: http.reverse_proxy.selection_policies",
                       "markdownDescription": "key to identify `selection_policy` module.  \npolicy: `string`  \nModule: `http.reverse_proxy.selection_policies`",
                       "type": "string",
                       "enum": [
+                        "cookie",
+                        "first",
+                        "ip_hash",
+                        "random",
+                        "uri_hash",
+                        "client_ip_hash",
+                        "header",
                         "least_conn",
                         "query",
-                        "random",
                         "random_choose",
                         "round_robin",
-                        "client_ip_hash",
-                        "cookie",
-                        "uri_hash",
-                        "weighted_round_robin",
-                        "first",
-                        "header",
-                        "ip_hash"
+                        "weighted_round_robin"
                       ]
                     }
                   }
@@ -6285,84 +6298,24 @@
                           "if": {
                             "properties": {
                               "handler": {
-                                "const": "authentication"
-                              }
-                            }
-                          },
-                          "then": {
-                            "$ref": "#/definitions/http.handlers.authentication"
-                          }
-                        },
-                        {
-                          "if": {
-                            "properties": {
-                              "handler": {
-                                "const": "copy_response_headers"
-                              }
-                            }
-                          },
-                          "then": {
-                            "$ref": "#/definitions/http.handlers.copy_response_headers"
-                          }
-                        },
-                        {
-                          "if": {
-                            "properties": {
-                              "handler": {
-                                "const": "crowdsec"
-                              }
-                            }
-                          },
-                          "then": {
-                            "$ref": "#/definitions/http.handlers.crowdsec"
-                          }
-                        },
-                        {
-                          "if": {
-                            "properties": {
-                              "handler": {
-                                "const": "file_server"
-                              }
-                            }
-                          },
-                          "then": {
-                            "$ref": "#/definitions/http.handlers.file_server"
-                          }
-                        },
-                        {
-                          "if": {
-                            "properties": {
-                              "handler": {
-                                "const": "push"
-                              }
-                            }
-                          },
-                          "then": {
-                            "$ref": "#/definitions/http.handlers.push"
-                          }
-                        },
-                        {
-                          "if": {
-                            "properties": {
-                              "handler": {
-                                "const": "reverse_proxy"
-                              }
-                            }
-                          },
-                          "then": {
-                            "$ref": "#/definitions/http.handlers.reverse_proxy"
-                          }
-                        },
-                        {
-                          "if": {
-                            "properties": {
-                              "handler": {
                                 "const": "copy_response"
                               }
                             }
                           },
                           "then": {
                             "$ref": "#/definitions/http.handlers.copy_response"
+                          }
+                        },
+                        {
+                          "if": {
+                            "properties": {
+                              "handler": {
+                                "const": "intercept"
+                              }
+                            }
+                          },
+                          "then": {
+                            "$ref": "#/definitions/http.handlers.intercept"
                           }
                         },
                         {
@@ -6381,48 +6334,36 @@
                           "if": {
                             "properties": {
                               "handler": {
-                                "const": "request_body"
+                                "const": "reverse_proxy"
                               }
                             }
                           },
                           "then": {
-                            "$ref": "#/definitions/http.handlers.request_body"
+                            "$ref": "#/definitions/http.handlers.reverse_proxy"
                           }
                         },
                         {
                           "if": {
                             "properties": {
                               "handler": {
-                                "const": "templates"
+                                "const": "rewrite"
                               }
                             }
                           },
                           "then": {
-                            "$ref": "#/definitions/http.handlers.templates"
+                            "$ref": "#/definitions/http.handlers.rewrite"
                           }
                         },
                         {
                           "if": {
                             "properties": {
                               "handler": {
-                                "const": "vars"
+                                "const": "authentication"
                               }
                             }
                           },
                           "then": {
-                            "$ref": "#/definitions/http.handlers.vars"
-                          }
-                        },
-                        {
-                          "if": {
-                            "properties": {
-                              "handler": {
-                                "const": "acme_server"
-                              }
-                            }
-                          },
-                          "then": {
-                            "$ref": "#/definitions/http.handlers.acme_server"
+                            "$ref": "#/definitions/http.handlers.authentication"
                           }
                         },
                         {
@@ -6453,24 +6394,24 @@
                           "if": {
                             "properties": {
                               "handler": {
-                                "const": "map"
+                                "const": "invoke"
                               }
                             }
                           },
                           "then": {
-                            "$ref": "#/definitions/http.handlers.map"
+                            "$ref": "#/definitions/http.handlers.invoke"
                           }
                         },
                         {
                           "if": {
                             "properties": {
                               "handler": {
-                                "const": "static_response"
+                                "const": "templates"
                               }
                             }
                           },
                           "then": {
-                            "$ref": "#/definitions/http.handlers.static_response"
+                            "$ref": "#/definitions/http.handlers.templates"
                           }
                         },
                         {
@@ -6489,12 +6430,48 @@
                           "if": {
                             "properties": {
                               "handler": {
+                                "const": "acme_server"
+                              }
+                            }
+                          },
+                          "then": {
+                            "$ref": "#/definitions/http.handlers.acme_server"
+                          }
+                        },
+                        {
+                          "if": {
+                            "properties": {
+                              "handler": {
+                                "const": "copy_response_headers"
+                              }
+                            }
+                          },
+                          "then": {
+                            "$ref": "#/definitions/http.handlers.copy_response_headers"
+                          }
+                        },
+                        {
+                          "if": {
+                            "properties": {
+                              "handler": {
                                 "const": "error"
                               }
                             }
                           },
                           "then": {
                             "$ref": "#/definitions/http.handlers.error"
+                          }
+                        },
+                        {
+                          "if": {
+                            "properties": {
+                              "handler": {
+                                "const": "file_server"
+                              }
+                            }
+                          },
+                          "then": {
+                            "$ref": "#/definitions/http.handlers.file_server"
                           }
                         },
                         {
@@ -6513,36 +6490,12 @@
                           "if": {
                             "properties": {
                               "handler": {
-                                "const": "invoke"
+                                "const": "static_response"
                               }
                             }
                           },
                           "then": {
-                            "$ref": "#/definitions/http.handlers.invoke"
-                          }
-                        },
-                        {
-                          "if": {
-                            "properties": {
-                              "handler": {
-                                "const": "log_append"
-                              }
-                            }
-                          },
-                          "then": {
-                            "$ref": "#/definitions/http.handlers.log_append"
-                          }
-                        },
-                        {
-                          "if": {
-                            "properties": {
-                              "handler": {
-                                "const": "rewrite"
-                              }
-                            }
-                          },
-                          "then": {
-                            "$ref": "#/definitions/http.handlers.rewrite"
+                            "$ref": "#/definitions/http.handlers.static_response"
                           }
                         },
                         {
@@ -6561,12 +6514,72 @@
                           "if": {
                             "properties": {
                               "handler": {
-                                "const": "intercept"
+                                "const": "crowdsec"
                               }
                             }
                           },
                           "then": {
-                            "$ref": "#/definitions/http.handlers.intercept"
+                            "$ref": "#/definitions/http.handlers.crowdsec"
+                          }
+                        },
+                        {
+                          "if": {
+                            "properties": {
+                              "handler": {
+                                "const": "log_append"
+                              }
+                            }
+                          },
+                          "then": {
+                            "$ref": "#/definitions/http.handlers.log_append"
+                          }
+                        },
+                        {
+                          "if": {
+                            "properties": {
+                              "handler": {
+                                "const": "map"
+                              }
+                            }
+                          },
+                          "then": {
+                            "$ref": "#/definitions/http.handlers.map"
+                          }
+                        },
+                        {
+                          "if": {
+                            "properties": {
+                              "handler": {
+                                "const": "push"
+                              }
+                            }
+                          },
+                          "then": {
+                            "$ref": "#/definitions/http.handlers.push"
+                          }
+                        },
+                        {
+                          "if": {
+                            "properties": {
+                              "handler": {
+                                "const": "request_body"
+                              }
+                            }
+                          },
+                          "then": {
+                            "$ref": "#/definitions/http.handlers.request_body"
+                          }
+                        },
+                        {
+                          "if": {
+                            "properties": {
+                              "handler": {
+                                "const": "vars"
+                              }
+                            }
+                          },
+                          "then": {
+                            "$ref": "#/definitions/http.handlers.vars"
                           }
                         },
                         {
@@ -6577,30 +6590,30 @@
                               "type": "string",
                               "enum": [
                                 "appsec",
-                                "authentication",
-                                "copy_response_headers",
-                                "crowdsec",
-                                "file_server",
-                                "push",
-                                "reverse_proxy",
                                 "copy_response",
+                                "intercept",
                                 "metrics",
-                                "request_body",
-                                "templates",
-                                "vars",
-                                "acme_server",
+                                "reverse_proxy",
+                                "rewrite",
+                                "authentication",
                                 "encode",
                                 "grpc_web",
-                                "map",
-                                "static_response",
-                                "tracing",
-                                "error",
-                                "headers",
                                 "invoke",
-                                "log_append",
-                                "rewrite",
+                                "templates",
+                                "tracing",
+                                "acme_server",
+                                "copy_response_headers",
+                                "error",
+                                "file_server",
+                                "headers",
+                                "static_response",
                                 "subroute",
-                                "intercept"
+                                "crowdsec",
+                                "log_append",
+                                "map",
+                                "push",
+                                "request_body",
+                                "vars"
                               ]
                             }
                           }
@@ -6706,12 +6719,120 @@
                       "if": {
                         "properties": {
                           "handler": {
-                            "const": "acme_server"
+                            "const": "push"
                           }
                         }
                       },
                       "then": {
-                        "$ref": "#/definitions/http.handlers.acme_server"
+                        "$ref": "#/definitions/http.handlers.push"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "request_body"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.request_body"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "vars"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.vars"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "appsec"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.appsec"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "copy_response"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.copy_response"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "intercept"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.intercept"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "metrics"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.metrics"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "reverse_proxy"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.reverse_proxy"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "rewrite"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.rewrite"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "authentication"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.authentication"
                       }
                     },
                     {
@@ -6742,240 +6863,12 @@
                       "if": {
                         "properties": {
                           "handler": {
-                            "const": "map"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.map"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "static_response"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.static_response"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "tracing"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.tracing"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "error"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.error"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "headers"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.headers"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
                             "const": "invoke"
                           }
                         }
                       },
                       "then": {
                         "$ref": "#/definitions/http.handlers.invoke"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "log_append"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.log_append"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "rewrite"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.rewrite"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "subroute"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.subroute"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "intercept"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.intercept"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "appsec"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.appsec"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "authentication"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.authentication"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "copy_response_headers"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.copy_response_headers"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "crowdsec"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.crowdsec"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "file_server"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.file_server"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "push"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.push"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "reverse_proxy"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.reverse_proxy"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "copy_response"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.copy_response"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "metrics"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.metrics"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
-                            "const": "request_body"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/http.handlers.request_body"
                       }
                     },
                     {
@@ -6994,12 +6887,132 @@
                       "if": {
                         "properties": {
                           "handler": {
-                            "const": "vars"
+                            "const": "tracing"
                           }
                         }
                       },
                       "then": {
-                        "$ref": "#/definitions/http.handlers.vars"
+                        "$ref": "#/definitions/http.handlers.tracing"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "acme_server"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.acme_server"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "copy_response_headers"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.copy_response_headers"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "error"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.error"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "file_server"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.file_server"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "headers"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.headers"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "static_response"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.static_response"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "subroute"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.subroute"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "crowdsec"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.crowdsec"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "log_append"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.log_append"
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "map"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/http.handlers.map"
                       }
                     },
                     {
@@ -7009,31 +7022,31 @@
                           "markdownDescription": "key to identify `handle` module.  \nhandler: `string`  \nModule: `http.handlers`",
                           "type": "string",
                           "enum": [
-                            "acme_server",
+                            "push",
+                            "request_body",
+                            "vars",
+                            "appsec",
+                            "copy_response",
+                            "intercept",
+                            "metrics",
+                            "reverse_proxy",
+                            "rewrite",
+                            "authentication",
                             "encode",
                             "grpc_web",
-                            "map",
-                            "static_response",
-                            "tracing",
-                            "error",
-                            "headers",
                             "invoke",
-                            "log_append",
-                            "rewrite",
-                            "subroute",
-                            "intercept",
-                            "appsec",
-                            "authentication",
-                            "copy_response_headers",
-                            "crowdsec",
-                            "file_server",
-                            "push",
-                            "reverse_proxy",
-                            "copy_response",
-                            "metrics",
-                            "request_body",
                             "templates",
-                            "vars"
+                            "tracing",
+                            "acme_server",
+                            "copy_response_headers",
+                            "error",
+                            "file_server",
+                            "headers",
+                            "static_response",
+                            "subroute",
+                            "crowdsec",
+                            "log_append",
+                            "map"
                           ]
                         }
                       }
@@ -7163,6 +7176,23 @@
       "markdownDescription": "vars: `object`  \nModule: `http.handlers.vars`  \n[godoc](https://pkg.go.dev/github.com/caddyserver/caddy/v2/modules/caddyhttp#VarsMiddleware)  \nVarsMiddleware is an HTTP middleware which sets variables to\nhave values that can be used in the HTTP request handler\nchain. The primary way to access variables is with placeholders,\nwhich have the form: `{http.vars.variable_name}`, or with\nthe `vars` and `vars_regexp` request matchers.\n\nThe key is the variable name, and the value is the value of the\nvariable. Both the name and value may use or contain placeholders.\n  \n",
       "type": "object",
       "additionalProperties": {}
+    },
+    "http.ip_sources.cloudflare": {
+      "description": "cloudflare: object\nModule: http.ip_sources.cloudflare\nhttps://pkg.go.dev/github.com/WeidiDeng/caddy-cloudflare-ip#CloudflareIPRange\nCloudflareIPRange provides a range of IP address prefixes (CIDRs) retrieved from cloudflare.\n\n",
+      "markdownDescription": "cloudflare: `object`  \nModule: `http.ip_sources.cloudflare`  \n[godoc](https://pkg.go.dev/github.com/WeidiDeng/caddy-cloudflare-ip#CloudflareIPRange)  \nCloudflareIPRange provides a range of IP address prefixes (CIDRs) retrieved from cloudflare.\n  \n",
+      "type": "object",
+      "properties": {
+        "interval": {
+          "description": "interval: number\nModule: http.ip_sources.cloudflare\nhttps://pkg.go.dev/github.com/caddyserver/caddy/v2#Duration\nrefresh Interval\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`.\n",
+          "markdownDescription": "interval: `number`  \nModule: `http.ip_sources.cloudflare`  \n[godoc](https://pkg.go.dev/github.com/caddyserver/caddy/v2#Duration)  \nrefresh Interval\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`.  \n",
+          "type": "number"
+        },
+        "timeout": {
+          "description": "timeout: number\nModule: http.ip_sources.cloudflare\nhttps://pkg.go.dev/github.com/caddyserver/caddy/v2#Duration\nrequest Timeout\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`.\n",
+          "markdownDescription": "timeout: `number`  \nModule: `http.ip_sources.cloudflare`  \n[godoc](https://pkg.go.dev/github.com/caddyserver/caddy/v2#Duration)  \nrequest Timeout\n\n\nDuration can be an integer or a string. An integer is\ninterpreted as nanoseconds. If a string, it is a Go\ntime.Duration value such as `300ms`, `1.5h`, or `2h45m`;\nvalid units are `ns`, `us`/`µs`, `ms`, `s`, `m`, `h`, and `d`.  \n",
+          "type": "number"
+        }
+      }
     },
     "http.ip_sources.static": {
       "description": "static: object\nModule: http.ip_sources.static\nhttps://pkg.go.dev/github.com/caddyserver/caddy/v2/modules/caddyhttp#StaticIPRange\nStaticIPRange provides a static range of IP address prefixes (CIDRs).\n\n",
@@ -7515,72 +7545,12 @@
               "if": {
                 "properties": {
                   "policy": {
-                    "const": "first"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.first"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "header"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.header"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "ip_hash"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.ip_hash"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "least_conn"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.least_conn"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
                     "const": "query"
                   }
                 }
               },
               "then": {
                 "$ref": "#/definitions/http.reverse_proxy.selection_policies.query"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "random"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.random"
               }
             },
             {
@@ -7611,12 +7581,12 @@
               "if": {
                 "properties": {
                   "policy": {
-                    "const": "client_ip_hash"
+                    "const": "weighted_round_robin"
                   }
                 }
               },
               "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.client_ip_hash"
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.weighted_round_robin"
               }
             },
             {
@@ -7635,6 +7605,42 @@
               "if": {
                 "properties": {
                   "policy": {
+                    "const": "first"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.first"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "ip_hash"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.ip_hash"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "random"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.random"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
                     "const": "uri_hash"
                   }
                 }
@@ -7647,12 +7653,36 @@
               "if": {
                 "properties": {
                   "policy": {
-                    "const": "weighted_round_robin"
+                    "const": "client_ip_hash"
                   }
                 }
               },
               "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.weighted_round_robin"
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.client_ip_hash"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "header"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.header"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "least_conn"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.least_conn"
               }
             },
             {
@@ -7662,18 +7692,18 @@
                   "markdownDescription": "key to identify `fallback` module.  \npolicy: `string`  \nModule: `http.reverse_proxy.selection_policies`",
                   "type": "string",
                   "enum": [
-                    "first",
-                    "header",
-                    "ip_hash",
-                    "least_conn",
                     "query",
-                    "random",
                     "random_choose",
                     "round_robin",
-                    "client_ip_hash",
+                    "weighted_round_robin",
                     "cookie",
+                    "first",
+                    "ip_hash",
+                    "random",
                     "uri_hash",
-                    "weighted_round_robin"
+                    "client_ip_hash",
+                    "header",
+                    "least_conn"
                   ]
                 }
               }
@@ -7719,6 +7749,30 @@
               "if": {
                 "properties": {
                   "policy": {
+                    "const": "client_ip_hash"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.client_ip_hash"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "header"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.header"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
                     "const": "least_conn"
                   }
                 }
@@ -7737,18 +7791,6 @@
               },
               "then": {
                 "$ref": "#/definitions/http.reverse_proxy.selection_policies.query"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "random"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.random"
               }
             },
             {
@@ -7779,12 +7821,12 @@
               "if": {
                 "properties": {
                   "policy": {
-                    "const": "client_ip_hash"
+                    "const": "weighted_round_robin"
                   }
                 }
               },
               "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.client_ip_hash"
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.weighted_round_robin"
               }
             },
             {
@@ -7803,48 +7845,12 @@
               "if": {
                 "properties": {
                   "policy": {
-                    "const": "uri_hash"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.uri_hash"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "weighted_round_robin"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.weighted_round_robin"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
                     "const": "first"
                   }
                 }
               },
               "then": {
                 "$ref": "#/definitions/http.reverse_proxy.selection_policies.first"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "header"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.header"
               }
             },
             {
@@ -7860,24 +7866,48 @@
               }
             },
             {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "random"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.random"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "uri_hash"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.uri_hash"
+              }
+            },
+            {
               "properties": {
                 "policy": {
                   "description": "key to identify fallback module.\npolicy: string\nModule: http.reverse_proxy.selection_policies",
                   "markdownDescription": "key to identify `fallback` module.  \npolicy: `string`  \nModule: `http.reverse_proxy.selection_policies`",
                   "type": "string",
                   "enum": [
+                    "client_ip_hash",
+                    "header",
                     "least_conn",
                     "query",
-                    "random",
                     "random_choose",
                     "round_robin",
-                    "client_ip_hash",
-                    "cookie",
-                    "uri_hash",
                     "weighted_round_robin",
+                    "cookie",
                     "first",
-                    "header",
-                    "ip_hash"
+                    "ip_hash",
+                    "random",
+                    "uri_hash"
                   ]
                 }
               }
@@ -7918,6 +7948,42 @@
               "if": {
                 "properties": {
                   "policy": {
+                    "const": "round_robin"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.round_robin"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "weighted_round_robin"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.weighted_round_robin"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "cookie"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.cookie"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
                     "const": "first"
                   }
                 }
@@ -7930,24 +7996,60 @@
               "if": {
                 "properties": {
                   "policy": {
-                    "const": "header"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.header"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
                     "const": "ip_hash"
                   }
                 }
               },
               "then": {
                 "$ref": "#/definitions/http.reverse_proxy.selection_policies.ip_hash"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "random"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.random"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "uri_hash"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.uri_hash"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "client_ip_hash"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.client_ip_hash"
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "policy": {
+                    "const": "header"
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/http.reverse_proxy.selection_policies.header"
               }
             },
             {
@@ -7978,18 +8080,6 @@
               "if": {
                 "properties": {
                   "policy": {
-                    "const": "random"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.random"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
                     "const": "random_choose"
                   }
                 }
@@ -7999,84 +8089,24 @@
               }
             },
             {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "round_robin"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.round_robin"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "client_ip_hash"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.client_ip_hash"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "cookie"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.cookie"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "uri_hash"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.uri_hash"
-              }
-            },
-            {
-              "if": {
-                "properties": {
-                  "policy": {
-                    "const": "weighted_round_robin"
-                  }
-                }
-              },
-              "then": {
-                "$ref": "#/definitions/http.reverse_proxy.selection_policies.weighted_round_robin"
-              }
-            },
-            {
               "properties": {
                 "policy": {
                   "description": "key to identify fallback module.\npolicy: string\nModule: http.reverse_proxy.selection_policies",
                   "markdownDescription": "key to identify `fallback` module.  \npolicy: `string`  \nModule: `http.reverse_proxy.selection_policies`",
                   "type": "string",
                   "enum": [
+                    "round_robin",
+                    "weighted_round_robin",
+                    "cookie",
                     "first",
-                    "header",
                     "ip_hash",
+                    "random",
+                    "uri_hash",
+                    "client_ip_hash",
+                    "header",
                     "least_conn",
                     "query",
-                    "random",
-                    "random_choose",
-                    "round_robin",
-                    "client_ip_hash",
-                    "cookie",
-                    "uri_hash",
-                    "weighted_round_robin"
+                    "random_choose"
                   ]
                 }
               }
@@ -8359,6 +8389,18 @@
                   "if": {
                     "properties": {
                       "provider": {
+                        "const": "file"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/tls.ca_pool.source.file"
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "provider": {
                         "const": "http"
                       }
                     }
@@ -8416,30 +8458,18 @@
                   }
                 },
                 {
-                  "if": {
-                    "properties": {
-                      "provider": {
-                        "const": "file"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/tls.ca_pool.source.file"
-                  }
-                },
-                {
                   "properties": {
                     "provider": {
                       "description": "key to identify ca module.\nprovider: string\nModule: tls.ca_pool.source",
                       "markdownDescription": "key to identify `ca` module.  \nprovider: `string`  \nModule: `tls.ca_pool.source`",
                       "type": "string",
                       "enum": [
+                        "file",
                         "http",
                         "inline",
                         "pki_intermediate",
                         "pki_root",
-                        "storage",
-                        "file"
+                        "storage"
                       ]
                     }
                   }
@@ -8617,18 +8647,6 @@
                 "if": {
                   "properties": {
                     "source": {
-                      "const": "a"
-                    }
-                  }
-                },
-                "then": {
-                  "$ref": "#/definitions/http.reverse_proxy.upstreams.a"
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "source": {
                       "const": "multi"
                     }
                   }
@@ -8650,15 +8668,27 @@
                 }
               },
               {
+                "if": {
+                  "properties": {
+                    "source": {
+                      "const": "a"
+                    }
+                  }
+                },
+                "then": {
+                  "$ref": "#/definitions/http.reverse_proxy.upstreams.a"
+                }
+              },
+              {
                 "properties": {
                   "source": {
                     "description": "key to identify sources module.\nsource: string\nModule: http.reverse_proxy.upstreams",
                     "markdownDescription": "key to identify `sources` module.  \nsource: `string`  \nModule: `http.reverse_proxy.upstreams`",
                     "type": "string",
                     "enum": [
-                      "a",
                       "multi",
-                      "srv"
+                      "srv",
+                      "a"
                     ]
                   }
                 }
@@ -8773,6 +8803,42 @@
                             "if": {
                               "properties": {
                                 "handler": {
+                                  "const": "tee"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/layer4.handlers.tee"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "throttle"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/layer4.handlers.throttle"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
+                                  "const": "tls"
+                                }
+                              }
+                            },
+                            "then": {
+                              "$ref": "#/definitions/layer4.handlers.tls"
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "handler": {
                                   "const": "echo"
                                 }
                               }
@@ -8830,56 +8896,20 @@
                             }
                           },
                           {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "tee"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/layer4.handlers.tee"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "throttle"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/layer4.handlers.throttle"
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "handler": {
-                                  "const": "tls"
-                                }
-                              }
-                            },
-                            "then": {
-                              "$ref": "#/definitions/layer4.handlers.tls"
-                            }
-                          },
-                          {
                             "properties": {
                               "handler": {
                                 "description": "key to identify handle module.\nhandler: string\nModule: layer4.handlers",
                                 "markdownDescription": "key to identify `handle` module.  \nhandler: `string`  \nModule: `layer4.handlers`",
                                 "type": "string",
                                 "enum": [
+                                  "tee",
+                                  "throttle",
+                                  "tls",
                                   "echo",
                                   "proxy",
                                   "proxy_protocol",
                                   "socks5",
-                                  "subroute",
-                                  "tee",
-                                  "throttle",
-                                  "tls"
+                                  "subroute"
                                 ]
                               }
                             }
@@ -9047,30 +9077,6 @@
                   "if": {
                     "properties": {
                       "policy": {
-                        "const": "first"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/layer4.proxy.selection_policies.first"
-                  }
-                },
-                {
-                  "if": {
-                    "properties": {
-                      "policy": {
-                        "const": "ip_hash"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/layer4.proxy.selection_policies.ip_hash"
-                  }
-                },
-                {
-                  "if": {
-                    "properties": {
-                      "policy": {
                         "const": "least_conn"
                       }
                     }
@@ -9116,18 +9122,42 @@
                   }
                 },
                 {
+                  "if": {
+                    "properties": {
+                      "policy": {
+                        "const": "first"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/layer4.proxy.selection_policies.first"
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "policy": {
+                        "const": "ip_hash"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/layer4.proxy.selection_policies.ip_hash"
+                  }
+                },
+                {
                   "properties": {
                     "policy": {
                       "description": "key to identify selection module.\npolicy: string\nModule: layer4.proxy.selection_policies",
                       "markdownDescription": "key to identify `selection` module.  \npolicy: `string`  \nModule: `layer4.proxy.selection_policies`",
                       "type": "string",
                       "enum": [
-                        "first",
-                        "ip_hash",
                         "least_conn",
                         "random",
                         "random_choose",
-                        "round_robin"
+                        "round_robin",
+                        "first",
+                        "ip_hash"
                       ]
                     }
                   }
@@ -9439,18 +9469,6 @@
                       "if": {
                         "properties": {
                           "handler": {
-                            "const": "proxy"
-                          }
-                        }
-                      },
-                      "then": {
-                        "$ref": "#/definitions/layer4.handlers.proxy"
-                      }
-                    },
-                    {
-                      "if": {
-                        "properties": {
-                          "handler": {
                             "const": "proxy_protocol"
                           }
                         }
@@ -9532,20 +9550,32 @@
                       }
                     },
                     {
+                      "if": {
+                        "properties": {
+                          "handler": {
+                            "const": "proxy"
+                          }
+                        }
+                      },
+                      "then": {
+                        "$ref": "#/definitions/layer4.handlers.proxy"
+                      }
+                    },
+                    {
                       "properties": {
                         "handler": {
                           "description": "key to identify handle module.\nhandler: string\nModule: layer4.handlers",
                           "markdownDescription": "key to identify `handle` module.  \nhandler: `string`  \nModule: `layer4.handlers`",
                           "type": "string",
                           "enum": [
-                            "proxy",
                             "proxy_protocol",
                             "socks5",
                             "subroute",
                             "tee",
                             "throttle",
                             "tls",
-                            "echo"
+                            "echo",
+                            "proxy"
                           ]
                         }
                       }
@@ -9650,6 +9680,30 @@
                 "if": {
                   "properties": {
                     "handler": {
+                      "const": "echo"
+                    }
+                  }
+                },
+                "then": {
+                  "$ref": "#/definitions/layer4.handlers.echo"
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "handler": {
+                      "const": "proxy"
+                    }
+                  }
+                },
+                "then": {
+                  "$ref": "#/definitions/layer4.handlers.proxy"
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "handler": {
                       "const": "proxy_protocol"
                     }
                   }
@@ -9719,44 +9773,20 @@
                 }
               },
               {
-                "if": {
-                  "properties": {
-                    "handler": {
-                      "const": "echo"
-                    }
-                  }
-                },
-                "then": {
-                  "$ref": "#/definitions/layer4.handlers.echo"
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "handler": {
-                      "const": "proxy"
-                    }
-                  }
-                },
-                "then": {
-                  "$ref": "#/definitions/layer4.handlers.proxy"
-                }
-              },
-              {
                 "properties": {
                   "handler": {
                     "description": "key to identify branch module.\nhandler: string\nModule: layer4.handlers",
                     "markdownDescription": "key to identify `branch` module.  \nhandler: `string`  \nModule: `layer4.handlers`",
                     "type": "string",
                     "enum": [
+                      "echo",
+                      "proxy",
                       "proxy_protocol",
                       "socks5",
                       "subroute",
                       "tee",
                       "throttle",
-                      "tls",
-                      "echo",
-                      "proxy"
+                      "tls"
                     ]
                   }
                 }
@@ -11160,18 +11190,6 @@
                   "if": {
                     "properties": {
                       "provider": {
-                        "const": "distributed"
-                      }
-                    }
-                  },
-                  "then": {
-                    "$ref": "#/definitions/tls.stek.distributed"
-                  }
-                },
-                {
-                  "if": {
-                    "properties": {
-                      "provider": {
                         "const": "standard"
                       }
                     }
@@ -11181,14 +11199,26 @@
                   }
                 },
                 {
+                  "if": {
+                    "properties": {
+                      "provider": {
+                        "const": "distributed"
+                      }
+                    }
+                  },
+                  "then": {
+                    "$ref": "#/definitions/tls.stek.distributed"
+                  }
+                },
+                {
                   "properties": {
                     "provider": {
                       "description": "key to identify key_source module.\nprovider: string\nModule: tls.stek",
                       "markdownDescription": "key to identify `key_source` module.  \nprovider: `string`  \nModule: `tls.stek`",
                       "type": "string",
                       "enum": [
-                        "distributed",
-                        "standard"
+                        "standard",
+                        "distributed"
                       ]
                     }
                   }
@@ -11618,6 +11648,18 @@
                 "if": {
                   "properties": {
                     "loader": {
+                      "const": "file"
+                    }
+                  }
+                },
+                "then": {
+                  "$ref": "#/definitions/tls.leaf_cert_loader.file"
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "loader": {
                       "const": "folder"
                     }
                   }
@@ -11651,28 +11693,16 @@
                 }
               },
               {
-                "if": {
-                  "properties": {
-                    "loader": {
-                      "const": "file"
-                    }
-                  }
-                },
-                "then": {
-                  "$ref": "#/definitions/tls.leaf_cert_loader.file"
-                }
-              },
-              {
                 "properties": {
                   "loader": {
                     "description": "key to identify leaf_certs_loaders module.\nloader: string\nModule: tls.leaf_cert_loader",
                     "markdownDescription": "key to identify `leaf_certs_loaders` module.  \nloader: `string`  \nModule: `tls.leaf_cert_loader`",
                     "type": "string",
                     "enum": [
+                      "file",
                       "folder",
                       "pem",
-                      "storage",
-                      "file"
+                      "storage"
                     ]
                   }
                 }
@@ -12670,6 +12700,18 @@
                     "if": {
                       "properties": {
                         "format": {
+                          "const": "json"
+                        }
+                      }
+                    },
+                    "then": {
+                      "$ref": "#/definitions/caddy.logging.encoders.json"
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "format": {
                           "const": "append"
                         }
                       }
@@ -12703,28 +12745,16 @@
                     }
                   },
                   {
-                    "if": {
-                      "properties": {
-                        "format": {
-                          "const": "json"
-                        }
-                      }
-                    },
-                    "then": {
-                      "$ref": "#/definitions/caddy.logging.encoders.json"
-                    }
-                  },
-                  {
                     "properties": {
                       "format": {
                         "description": "key to identify encoder module.\nformat: string\nModule: caddy.logging.encoders",
                         "markdownDescription": "key to identify `encoder` module.  \nformat: `string`  \nModule: `caddy.logging.encoders`",
                         "type": "string",
                         "enum": [
+                          "json",
                           "append",
                           "console",
-                          "filter",
-                          "json"
+                          "filter"
                         ]
                       }
                     }

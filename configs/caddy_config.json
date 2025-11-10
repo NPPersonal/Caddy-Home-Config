@@ -30,7 +30,30 @@
         "serv0": {
           "listen": [":443", ":33080"],
           "protocols": ["h1", "h2", "h2c", "h3"],
+          "trusted_proxies": { "source": "cloudflare", "interval": "12h" },
           "routes": [
+            {
+              "terminal": true,
+              "match": [{ "host": ["whoami.mingchun.stream"] }],
+              "handle": [
+                {
+                  "handler": "crowdsec"
+                },
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "whoami:80" }]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
             {
               "terminal": true,
               "match": [{ "host": ["pihole.home.arpa"] }],

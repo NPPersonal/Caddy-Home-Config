@@ -20,6 +20,7 @@ Installed modules:
 - [caddy-grpc-web](https://github.com/mholt/caddy-grpc-web): bridge between grpc-web and caddy
 - [caddy-dns-cloudflare](https://github.com/caddy-dns/cloudflare): manage DNS records with Cloudflare accounts
 - [caddy-crowdsec-bouncer](https://github.com/hslatman/caddy-crowdsec-bouncer/tree/main): crowdsec security
+- [caddy-cloudflare-ip](https://github.com/WeidiDeng/caddy-cloudflare-ip): trusted cloudflare proxy if you are using cloudflare for your domain
 
 ### [caddy-json-schema](https://github.com/abiosoft/caddy-json-schema)
 
