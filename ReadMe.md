@@ -24,7 +24,9 @@ Installed modules:
 
 ### [caddy-json-schema](https://github.com/abiosoft/caddy-json-schema)
 
-**Do not remove .vscode** folder as it is settings to enable intellisense for caddy Json configuration file in visual studio code.
+**Do not remove .vscode** folder as it is settings to enable intellisense for caddy Json configuration file in visual studio code. **Only remove .vscode when you need to update .vscode**.
+
+To update **.vscode** you need to make sure the container is up and running then use commandline tool to copy **.vscode in caddy container under /app path** to your vscode project in your local machine.
 
 ## Usage
 

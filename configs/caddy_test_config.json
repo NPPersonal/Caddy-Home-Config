@@ -1,0 +1,54 @@
+{
+  "admin": {},
+  "logging": {
+    "logs": {
+      "default": {
+        "level": "DEBUG",
+        "writer": {
+          "output": "file",
+          "filename": "/var/log/caddy/caddy.log",
+          "mode": "644"
+        }
+      },
+      "console-logs": {
+        "level": "DEBUG",
+        "writer": {
+          "output": "stdout"
+        }
+      }
+    }
+  },
+  "apps": {
+    "http": {
+      "servers": {
+        "serv0": {
+          "listen": [":443"],
+          "protocols": ["h1", "h2", "h2c", "h3"],
+          "trusted_proxies": { "source": "cloudflare", "interval": "12h" },
+          "routes": [
+            {
+              "terminal": true,
+              "match": [{ "host": ["localhost"] }],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "static_response",
+                          "status_code": "200",
+                          "body": "It works"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
