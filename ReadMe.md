@@ -26,7 +26,14 @@ Installed modules:
 
 **Do not remove .vscode** folder as it is settings to enable intellisense for caddy Json configuration file in visual studio code. **Only remove .vscode when you need to update .vscode**.
 
-To update **.vscode** you need to make sure the container is up and running then use commandline tool to copy **.vscode in caddy container under /app path** to your vscode project in your local machine.
+Dockerfile will use caddy-json-schema to generate json intellisense `.vscode` folder under path `/app/data` in the container.
+You can bind mount this path to host machine.
+
+To update **.vscode**:
+
+1. Make sure the container is up and running with **bind mount** container `data directory path`(/app/data) to host machine.
+2. Use commandline tool to copy **.vscode** folder under **bind mount** path in local machine to your desired location.
+   `scp -r <[Login_Account]:[Docker_Host_IP]:[Bind_Mount_Path]/.vscode> <Your_Desired_Location>`
 
 ## Usage
 

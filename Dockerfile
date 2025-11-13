@@ -18,11 +18,10 @@ FROM caddy:2.10.2-alpine
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 
+RUN apk update && apk add --no-cache bash curl
+
 # Set working directory
 WORKDIR /app
-
-# Copy configuration folder 
-COPY ./configs ./configs
 
 # Generate json-schema's intellisence folder which contain config files for visual studio code
 # folder name will be `.vscode`
@@ -31,10 +30,19 @@ COPY ./configs ./configs
 # to copy configuration folder after the container is up and running 
 RUN caddy json-schema --no-cache --vscode
 
-# Change privileage of folder to read only for `group` and `other`
-RUN chmod 744 .vscode
+# Copy configuration folder 
+COPY ./configs ./configs
+
+# Copy shell script
+COPY ./run.sh ./run.sh
+RUN chmod 744 ./run.sh
+
+RUN chmod -R 744 /app
+
+# Run shell script
+ENTRYPOINT [ "./run.sh" ]
 
 # Run caddy with config file
 # Modify parameter after `--config` tp specify particular config file
-CMD ["caddy", "run", "--config", "./configs/caddy_config.json"]
+#CMD ["caddy", "run", "--config", "/app/configs/caddy_test_config.json"]
 
