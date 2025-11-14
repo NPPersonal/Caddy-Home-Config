@@ -18,7 +18,8 @@ FROM caddy:2.10.2-alpine
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 
-RUN apk update && apk add --no-cache bash curl
+# Update apk and install bash, curl, shadow(for basic linux command)
+RUN apk update && apk add --no-cache bash curl shadow
 
 # Set working directory
 WORKDIR /app

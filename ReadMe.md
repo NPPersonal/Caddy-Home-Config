@@ -95,6 +95,8 @@ services:
     environment:
       # Use localhost:2019 only if your don't want to expose api to external machine
       CADDY_ADMIN: 0.0.0.0:2019
+      HOST_UID: 1000 # optional, default 1000
+      HOST_GID: 1000 # optional, default 1000
     volumes:
       # Either replace <Path_To_Storage> with actual path in machine or give a name to storage in docker volume
       - <Path_To_Storage>:/srv
